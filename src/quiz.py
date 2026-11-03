@@ -24,3 +24,13 @@ def get_menu_options() -> list[str]:
 def get_questions_for_category(category: str) -> list[dict]:
     """Return a list of questions for the specified category."""
     # return quiz_data.get_questions_by_category(category)
+
+
+def get_high_scores() -> list[dict]:
+    """Return a list of past high scores."""
+    # return quiz_data.get_high_scores()
+
+
+def save_high_score(username: str, score: int) -> None:
+    """Save a new high score for the specified user."""
+    # quiz_data.save_high_score(username, score)
