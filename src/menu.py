@@ -1,3 +1,9 @@
+"""
+Menu system for the quiz game.
+All user interactions are handled through this module, including displaying menus, prompting for input, and showing game rules and high scores.
+"""
+
+
 def show_setup_menu(categories: list[str]) -> tuple[str, str]:
     """Prompt the user to select a category and difficulty.
 
