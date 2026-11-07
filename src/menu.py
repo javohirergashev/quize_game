@@ -28,7 +28,7 @@ def show_main_menu(menu) -> int:
     """
 
     while True:
-        print("\nMain Menu:\n")
+        print("\n\033[1;39;49mMain Menu:\033[0m\n")
         for index, option in enumerate(menu, start=1):
             print(f"{index}. {option}")
 
@@ -37,7 +37,7 @@ def show_main_menu(menu) -> int:
             if 1 <= choice <= len(menu):
                 return choice - 1  # Return 0-based index
             else:
-                print(f"\nInvalid choice. Please enter a number between 1 and {len(menu)}.")
+                print(f"\n\033[0;91;49mInvalid Choice.\033[0m Please enter a number between \033[32m1 and {len(menu)}.\033[0m")
         except ValueError:
             print("\nInvalid input. Please enter a number.")
 
