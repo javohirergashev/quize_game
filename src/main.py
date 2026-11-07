@@ -11,7 +11,11 @@ def welcome_message() -> None:
 def main() -> None:
     """Main entry point for the quiz game application."""
     welcome_message()
-    user_choice = menu.show_main_menu(quiz.get_menu_options())
+    quiz_options = quiz.get_menu_options()  # Get the main menu options from the quiz module
+    user_choice = menu.show_main_menu(quiz_options)
+
+    if user_choice == quiz_options.index("Exit"):
+        print("Thank you for playing! Goodbye!")
 
     print(user_choice)
 

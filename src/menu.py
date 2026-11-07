@@ -27,8 +27,22 @@ def show_main_menu(menu) -> int:
     :rtype: int
     """
 
-    for index, option in enumerate(menu, start=1):
-        print(f"{index}. {option}")
+    while True:
+        print("\nMain Menu:\n")
+        for index, option in enumerate(menu, start=1):
+            print(f"{index}. {option}")
+
+        try:
+            choice = int(input("\nPlease select an option (1-5): "))
+            if 1 <= choice <= len(menu):
+                return choice - 1  # Return 0-based index
+            else:
+                print(f"\nInvalid choice. Please enter a number between 1 and {len(menu)}.")
+        except ValueError:
+            print("\nInvalid input. Please enter a number.")
+
+        input("\nPress Enter to continue...")
+        os.system("clear")  # Clear the terminal for a cleaner interface
 
 
 def show_rules() -> None:
@@ -85,11 +99,9 @@ def display_result(is_correct: bool, correct_choice: str) -> None:
     """
 
 
-def display_summary(score: int, total: int) -> None:
+def display_summary(score: int) -> None:
     """Display the final score summary after the quiz session.
 
-    :param score: The user's final score.
+    :param score: The user's final score. Score is presented as a percentage of correct answers out of number of questions attempted.
     :type score: int
-    :param total: The total possible score.
-    :type total: int
     """
