@@ -34,6 +34,25 @@ def print_goodbye() -> None:
     """)
 
 
+def init_quiz_session() -> dict:
+    """Initialize a new quiz session with default values.
+
+    :return: A dictionary representing the initial state of the quiz session.
+    :rtype: dict
+    """
+    return {
+        "player_name": None,
+        "score": 0,
+        "total_questions": 0,
+        "correct_answers": 0,
+        "incorrect_answers": 0,
+        "category": None,
+        "difficulty": None,
+        "percentage": 0.0,
+        "date": None,
+    }
+
+
 def main() -> None:
     """Main entry point for the quiz game application."""
     print_welcome()
@@ -43,6 +62,11 @@ def main() -> None:
     if user_choice == quiz_options.index("Exit"):
         print_goodbye()
         return  # Exit the program gracefully
+
+    if user_choice == quiz_options.index("Start Quiz"):
+        quiz_session = init_quiz_session()
+        quiz_session["category"], quiz_session["difficulty"] = menu.show_setup_menu(quiz.get_category())
+        print(f"You selected category: {quiz_session['category']} and difficulty: {quiz_session['difficulty']}. Starting the quiz...")
 
 
 if __name__ == "__main__":
