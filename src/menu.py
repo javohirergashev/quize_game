@@ -5,7 +5,14 @@ Handles all terminal rendering and user input, keeping business logic
 and state management isolated in other modules.
 """
 
-import os
+import sys
+
+
+def wait_and_clear_screen() -> None:
+    """Prompt the user to press Enter, then clear the terminal screen."""
+    input("\nPress \033[32mEnter\033[0m to continue...")
+    sys.stdout.write("\033[2J\033[H")
+    sys.stdout.flush()
 
 
 def show_setup_menu(categories: list[str]) -> tuple[str, str]:
@@ -16,6 +23,44 @@ def show_setup_menu(categories: list[str]) -> tuple[str, str]:
     :return: A tuple containing the selected (category, difficulty).
     :rtype: tuple[str, str]
     """
+
+    while True:
+        print("\n\033[1;39;49mSetup Menu:\033[0m\n")
+        print("Available Categories:")
+        for index, category in enumerate(categories, start=1):
+            print(f"{index}. {category}")
+
+        try:
+            category_choice = int(input(f"\nPlease select a category (1-{len(categories)}): "))
+            if 1 <= category_choice <= len(categories):
+                selected_category = categories[category_choice - 1]
+                break
+            else:
+                print(f"\n\033[0;91;49mInvalid Choice.\033[0m Please enter a number between \033[32m1 and {len(categories)}.\033[0m")
+        except ValueError:
+            print("\nInvalid input. Please enter a number.")
+
+        wait_and_clear_screen()
+
+    while True:
+        print("\nSelect Difficulty Level:")
+        difficulties = ["Easy", "Medium", "Hard"]
+        for index, difficulty in enumerate(difficulties, start=1):
+            print(f"{index}. {difficulty}")
+
+        try:
+            difficulty_choice = int(input(f"\nPlease select a difficulty (1-{len(difficulties)}): "))
+            if 1 <= difficulty_choice <= len(difficulties):
+                selected_difficulty = difficulties[difficulty_choice - 1]
+                break
+            else:
+                print(f"\n\033[0;91;49mInvalid Choice.\033[0m Please enter a number between \033[32m1 and {len(difficulties)}.\033[0m")
+        except ValueError:
+            print("\nInvalid input. Please enter a number.")
+
+        wait_and_clear_screen()
+
+    return selected_category, selected_difficulty
 
 
 def show_main_menu(menu) -> int:
@@ -35,14 +80,17 @@ def show_main_menu(menu) -> int:
         try:
             choice = int(input("\nPlease select an option (1-5): "))
             if 1 <= choice <= len(menu):
-                return choice - 1  # Return 0-based index
+                # Only clear if they picked an active menu option, NOT exit
+                # Assuming the last option in menu is 'Exit':
+                if choice != len(menu):
+                    wait_and_clear_screen()
+                return choice - 1
             else:
                 print(f"\n\033[0;91;49mInvalid Choice.\033[0m Please enter a number between \033[32m1 and {len(menu)}.\033[0m")
         except ValueError:
             print("\nInvalid input. Please enter a number.")
 
-        input("\nPress Enter to continue...")
-        os.system("clear")  # Clear the terminal for a cleaner interface
+        wait_and_clear_screen()
 
 
 def show_rules() -> None:
