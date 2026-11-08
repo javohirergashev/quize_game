@@ -7,12 +7,12 @@ All user interface and terminal rendering is handled in the menu.py module.
 # import quiz_data
 
 
-def run_quiz_game() -> None:
-    """Run the main quiz game loop, handling question display, user input, and scoring.
+def get_category() -> list[str]:
+    """Return a list of available categories."""
+    # This function should return a list of category names.
+    # For example: return ["Science", "History", "Sports"]
 
-    :return: None
-    :rtype: None
-    """
+    return ["Science", "History", "Sports"]  # Placeholder implementation
 
 
 def get_category_and_count() -> list[(str, int)]:
