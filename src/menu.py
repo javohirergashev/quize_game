@@ -73,7 +73,7 @@ def show_main_menu(menu) -> int:
     """
 
     while True:
-        print("\n\033[1;39;49mMain Menu:\033[0m\n")
+        print("\n\n\033[1;39;49mMain Menu:\033[0m\n")
         for index, option in enumerate(menu, start=1):
             print(f"{index}. {option}")
 
@@ -93,8 +93,12 @@ def show_main_menu(menu) -> int:
         wait_and_clear_screen()
 
 
-def show_rules() -> None:
-    """Display game rules, scoring mechanics, and hint details."""
+def show_rules(rule: str) -> None:
+    """Display game rules, scoring mechanics, and hint details.
+    :param rule: Quiz rules and scoring mechanics to display.
+    :type rule: str
+    """
+    print(rule)
 
 
 def show_high_scores(high_scores: list[dict]) -> None:
@@ -145,6 +149,10 @@ def display_result(is_correct: bool, correct_choice: str) -> None:
     :param correct_choice: The label or text of the correct answer.
     :type correct_choice: str
     """
+    if is_correct:
+        print(f"\n\033[1;32mCorrect!\033[0mYour choice was {correct_choice}.")
+    else:
+        print(f"\n\033[1;31mIncorrect.\033[0m Your choice was {correct_choice}.")
 
 
 def display_summary(score: int) -> None:

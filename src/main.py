@@ -53,20 +53,43 @@ def init_quiz_session() -> dict:
     }
 
 
-def main() -> None:
+def start_quiz() -> None:
+    """Start the quiz game by initializing a session and displaying the setup menu."""
+    quiz_session = init_quiz_session()
+    quiz_session["category"], quiz_session["difficulty"] = menu.show_setup_menu(quiz.get_category())
+
+    # while True:
+
+
+def main(first_run=True) -> None:
     """Main entry point for the quiz game application."""
-    print_welcome()
+
+    # If this is the first run, display the welcome message
+    if first_run:
+        print_welcome()
+
     quiz_options = quiz.get_menu_options()  # Get the main menu options from the quiz module
-    user_choice = menu.show_main_menu(quiz_options)
+    user_choice = menu.show_main_menu(quiz_options)  # Get the user's menu choice from the menu module
 
     if user_choice == quiz_options.index("Exit"):
         print_goodbye()
-        return  # Exit the program gracefully
+        return  # Exit the program
 
     if user_choice == quiz_options.index("Start Quiz"):
-        quiz_session = init_quiz_session()
-        quiz_session["category"], quiz_session["difficulty"] = menu.show_setup_menu(quiz.get_category())
-        print(f"You selected category: {quiz_session['category']} and difficulty: {quiz_session['difficulty']}. Starting the quiz...")
+        start_quiz()  # Start the quiz if the user selected "Start Quiz"
+        menu.wait_and_clear_screen()
+        main(False)  # Restart the main menu after the quiz
+
+    menu_actions = {
+        quiz_options.index("View High Scores"): lambda: menu.show_high_scores(quiz.get_high_scores()),
+        quiz_options.index("Browse Categories"): lambda: menu.browse_categories(quiz.get_category_and_count()),
+        quiz_options.index("Rules"): lambda: menu.show_rules(quiz.get_rules()),
+    }
+
+    if user_choice in menu_actions:
+        menu_actions[user_choice]()  # Execute the corresponding action
+        menu.wait_and_clear_screen()
+        main(False)  # Restart the main menu
 
 
 if __name__ == "__main__":

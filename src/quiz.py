@@ -4,15 +4,16 @@ This module only contains the main game loop and logic for running the quiz game
 All user interface and terminal rendering is handled in the menu.py module.
 """
 
-# import quiz_data
+import quiz_data
 
 
 def get_category() -> list[str]:
-    """Return a list of available categories."""
-    # This function should return a list of category names.
-    # For example: return ["Science", "History", "Sports"]
+    """Return a list of available categories.
+    :return: List of category names.
+    :rtype: list[str]
+    """
 
-    return ["Science", "History", "Sports"]  # Placeholder implementation
+    return [category.capitalize() for category in quiz_data.QUIZ_DATA]
 
 
 def get_category_and_count() -> list[(str, int)]:
@@ -21,6 +22,7 @@ def get_category_and_count() -> list[(str, int)]:
     :return: List of tuples containing (category_name, question_count).
     :rtype: list[tuple[str, int]]
     """
+    return [(category.capitalize(), len(quiz_data.QUIZ_DATA[category])) for category in quiz_data.QUIZ_DATA]
 
 
 def get_menu_options() -> list[str]:
@@ -40,6 +42,7 @@ def get_questions_for_category(category: str) -> list[dict]:
     :return: List of question dictionaries.
     :rtype: list[dict]
     """
+    return [question for question in quiz_data.QUIZ_DATA[category.lower()]]
 
 
 def get_high_scores() -> list[dict]:
@@ -50,15 +53,13 @@ def get_high_scores() -> list[dict]:
     """
 
 
-def save_high_score(username: str, score: int) -> None:
-    """Save a new high score for the specified user.
+def save_high_score(session_dict: dict) -> bool:
+    """Save the current session's score to the high scores list.
 
-    :param username: The name of the user.
-    :type username: str
-    :param score: The score to save.
-    :type score: int
-    :return: None
-    :rtype: None
+    :param session_dict: Dictionary containing the current quiz session's data.
+    :type session_dict: dict
+    :return: True if the score was saved successfully, False otherwise.
+    :rtype: bool
     """
 
 
@@ -69,20 +70,4 @@ def get_rules() -> str:
     :rtype: str
     """
 
-
-def update_current_score(is_correct: bool) -> int:
-    """Update the current score based on whether the answer was correct.
-
-    :param is_correct: Boolean indicating if the user's answer was correct.
-    :type is_correct: bool
-    :return: The updated score after applying the result of the current question.
-    :rtype: int
-    """
-
-
-def get_current_score() -> int:
-    """Return the current score of the user.
-
-    :return: The user's current score.
-    :rtype: int
-    """
+    return quiz_data.QUIZ_RULES
