@@ -22,7 +22,14 @@ def get_category_and_count() -> list[(str, int)]:
     :return: List of tuples containing (category_name, question_count).
     :rtype: list[tuple[str, int]]
     """
-    return [(category.capitalize(), len(quiz_data.QUIZ_DATA[category])) for category in quiz_data.QUIZ_DATA]
+    categories_and_counts = []
+
+    for category in quiz_data.QUIZ_DATA:
+        category_name = category.capitalize()
+        question_count = len(quiz_data.QUIZ_DATA[category]["hard"]) + len(quiz_data.QUIZ_DATA[category]["normal"])
+        categories_and_counts.append((category_name, question_count))
+
+    return categories_and_counts
 
 
 def get_menu_options() -> list[str]:
