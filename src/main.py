@@ -45,6 +45,8 @@ def init_quiz_session() -> dict:
         "score": 0,
         "total_questions": 0,
         "correct_answers": 0,
+        "incorrect_answers": 0,
+        "questions_attempted": 0,
         "category": None,
         "difficulty": None,
         "date": None,
@@ -79,14 +81,14 @@ def start_quiz() -> None:
                 quiz_session["score"] += 10  # Award points for correct answers
             else:
                 menu.display_result(False, question["choices"][user_choice])
+                quiz_session["incorrect_answers"] += 1
 
+            quiz_session["questions_attempted"] += 1
             menu.wait_and_clear_screen()
 
         # Display the final score summary after the quiz session
         menu.display_summary(
-            score=quiz_session["score"],
-            correct_answers=quiz_session["correct_answers"],
-            total_questions=quiz_session["total_questions"],
+            quiz_session,
         )
 
         main(False)  # Return to main menu after finishing the quiz
