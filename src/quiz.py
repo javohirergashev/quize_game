@@ -171,15 +171,15 @@ def delete_high_score(username: str) -> bool:
         return False
 
 
-def edit_username(old_username: str, new_username: str) -> dict:
+def edit_username(old_username: str, new_username: str) -> tuple[bool, str]:
     """Edit the username in the high scores list.
 
     :param old_username: The current username of the user.
     :type old_username: str
     :param new_username: The new username to replace the old one.
     :type new_username: str
-    :return: A dictionary containing the result of the edit operation.
-    :rtype: dict
+    :return: A tuple containing a boolean indicating success and a message string.
+    :rtype: tuple[bool, str]
     """
 
     old_username = old_username.lower()
@@ -199,11 +199,11 @@ def edit_username(old_username: str, new_username: str) -> dict:
             with open(json_data_path, "w") as file:
                 json.dump(data, file, indent=4)
 
-            return {"is_success": True, "message": f"Username changed from '{old_username}' to '{new_username}' successfully."}
+            return (True, f"Username changed from '{old_username}' to '{new_username}' successfully.")
         elif new_username in get_past_usernames():
-            return {"is_success": False, "message": f"Username '{new_username}' already exists in the high scores. Please choose a different name."}
+            return (False, f"Username '{new_username}' already exists in the high scores. Please choose a different name.")
         else:
-            return {"is_success": False, "message": f"Username '{old_username}' does not exist in the high scores. Please finish the quiz and save your score first."}
+            return (False, f"Username '{old_username}' does not exist in the high scores. Please finish the quiz and save your score first.")
 
     except (FileNotFoundError, json.JSONDecodeError, KeyError, OSError) as e:
-        return {"is_success": False, "message": f"Failed to edit username: {e}"}
+        return (False, f"Failed to edit username: {e}")
