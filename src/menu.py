@@ -26,7 +26,7 @@ def display_setup_menu(categories: list[str]) -> tuple[str, str]:
 
     while True:
         print("\n\033[1;39;49mSetup Menu:\033[0m\n")
-        print("\n\033[1;93m ★ ★ ★  \033[1;92mChoose Categories\033[1;93m  ★ ★ ★\033[0m\n")
+        print("\033[1;93m ★ ★ ★  \033[1;92mChoose Categories\033[1;93m  ★ ★ ★\033[0m\n")
         for index, category in enumerate(categories, start=1):
             print(f"{index}. {category}")
 
@@ -34,6 +34,7 @@ def display_setup_menu(categories: list[str]) -> tuple[str, str]:
             category_choice = int(input(f"\nPlease select a category (1-{len(categories)}): "))
             if 1 <= category_choice <= len(categories):
                 selected_category = categories[category_choice - 1]
+                wait_and_clear_screen()
                 break
             else:
                 print(f"\n\033[0;91;49mInvalid Choice.\033[0m Please enter a number between \033[32m1 and {len(categories)}.\033[0m")
@@ -52,6 +53,7 @@ def display_setup_menu(categories: list[str]) -> tuple[str, str]:
             difficulty_choice = int(input(f"\nPlease select a difficulty (1-{len(difficulties)}): "))
             if 1 <= difficulty_choice <= len(difficulties):
                 selected_difficulty = difficulties[difficulty_choice - 1]
+                wait_and_clear_screen()
                 break
             else:
                 print(f"\n\033[0;91;49mInvalid Choice.\033[0m Please enter a number between \033[32m1 and {len(difficulties)}.\033[0m")

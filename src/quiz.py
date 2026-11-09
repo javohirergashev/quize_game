@@ -4,7 +4,10 @@ This module only contains the main game loop and logic for running the quiz game
 All user interface and terminal rendering is handled in the menu.py module.
 """
 
-import quiz_data
+import json
+import pathlib
+
+json_data_path = pathlib.Path(__file__).parent / "quiz_data.json"
 
 
 def get_category() -> list[str]:
@@ -13,7 +16,11 @@ def get_category() -> list[str]:
     :rtype: list[str]
     """
 
-    return [category.capitalize() for category in quiz_data.QUIZ_DATA]
+    # Load the quiz data from the JSON file and extract the category names
+    with open(json_data_path, "r") as file:
+        categories = list(json.load(file)["QUIZ_DATA"].keys())
+
+    return [category.capitalize() for category in categories]
 
 
 def get_category_and_count() -> list[(str, int)]:
@@ -22,11 +29,15 @@ def get_category_and_count() -> list[(str, int)]:
     :return: List of tuples containing (category_name, question_count).
     :rtype: list[tuple[str, int]]
     """
+
+    with open(json_data_path, "r") as file:
+        QUIZ_DATA = json.load(file)["QUIZ_DATA"]
+
     categories_and_counts = []
 
-    for category in quiz_data.QUIZ_DATA:
+    for category in QUIZ_DATA:
         category_name = category.capitalize()
-        question_count = len(quiz_data.QUIZ_DATA[category]["hard"]) + len(quiz_data.QUIZ_DATA[category]["normal"])
+        question_count = len(QUIZ_DATA[category]["hard"]) + len(QUIZ_DATA[category]["normal"])
         categories_and_counts.append((category_name, question_count))
 
     return categories_and_counts
@@ -38,7 +49,8 @@ def get_menu_options() -> list[str]:
     :return: List of menu option strings.
     :rtype: list[str]
     """
-    return ["Start Quiz", "View High Scores", "Browse Categories", "Rules", "Exit"]
+    with open(json_data_path, "r") as file:
+        return json.load(file)["MENU_OPTIONS"]
 
 
 def get_questions_for_category(category: str, difficulty: str) -> list[dict]:
@@ -55,7 +67,9 @@ def get_questions_for_category(category: str, difficulty: str) -> list[dict]:
     if difficulty.lower() == "easy":
         difficulty = "normal"  # Map "easy" to "normal" in the quiz data
 
-    return [question for question in quiz_data.QUIZ_DATA[category.lower()][difficulty.lower()]]
+    with open(json_data_path, "r") as file:
+        QUIZ_DATA = json.load(file)["QUIZ_DATA"]
+        return [question for question in QUIZ_DATA[category.lower()][difficulty.lower()]]
 
 
 def get_high_scores() -> list[dict]:
@@ -65,10 +79,13 @@ def get_high_scores() -> list[dict]:
     :rtype: list[dict]
     """
 
-    if not quiz_data.HIGH_SCORES:
+    with open(json_data_path, "r") as file:
+        HIGH_SCORES = json.load(file).get("HIGH_SCORES", None)
+
+    if not HIGH_SCORES:
         return []
 
-    return sorted(quiz_data.HIGH_SCORES.values(), key=lambda x: x["score"], reverse=True)
+    return sorted(HIGH_SCORES.values(), key=lambda x: x["score"], reverse=True)
 
 
 def get_past_usernames() -> list[str]:
@@ -77,7 +94,8 @@ def get_past_usernames() -> list[str]:
     :return: List of usernames.
     :rtype: list[str]
     """
-    return [username for username in quiz_data.HIGH_SCORES]
+    with open(json_data_path, "r") as file:
+        return [username for username in json.load(file).get("HIGH_SCORES")]
 
 
 def save_high_score(session_dict: dict) -> bool:
@@ -88,8 +106,25 @@ def save_high_score(session_dict: dict) -> bool:
     :return: True if the score was saved successfully, False otherwise.
     :rtype: bool
     """
-    quiz_data.HIGH_SCORES[session_dict["player_name"].lower()] = session_dict
-    return True
+    try:
+        player_name = session_dict["player_name"].lower()
+
+        # Read existing data
+        with open(json_data_path, "r") as file:
+            data = json.load(file)
+
+        # Update data
+        data["HIGH_SCORES"][player_name] = session_dict
+
+        # Overwrite the file
+        with open(json_data_path, "w") as file:
+            json.dump(data, file, indent=4)
+
+        return True
+
+    except (FileNotFoundError, json.JSONDecodeError, KeyError, OSError) as e:
+        print(f"Failed to save high score: {e}")
+        return False
 
 
 def get_rules() -> str:
@@ -99,4 +134,5 @@ def get_rules() -> str:
     :rtype: str
     """
 
-    return quiz_data.QUIZ_RULES
+    with open(json_data_path, "r") as file:
+        return json.load(file).get("QUIZ_RULES", "")
