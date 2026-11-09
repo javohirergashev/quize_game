@@ -402,7 +402,7 @@ QUIZ_RULES: str = f"""\n\n
 
   {CYAN}[3] SCORING{RESET}
       {WHITE}• Enter the matching number (1-4) for each prompt.{RESET}
-      {WHITE}• Correct answers yield points; wrong guesses carry no penalty.{RESET}
+      {WHITE}• Correct answers yield 10 points; wrong guesses carry no penalty.{RESET}
 
   {CYAN}[4] LEADERBOARD & ALIASES{RESET}
       {WHITE}• Submit an {GOLD}alias or username{WHITE} after the run to log your score.{RESET}
