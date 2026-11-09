@@ -129,7 +129,7 @@ def get_user_info() -> str:
     """
 
 
-def display_question_and_get_choice(category: str, question: str, choices: list[str], hint: str | None, question_index: int, total_questions: int) -> int:
+def display_question_and_get_choice(category: str, question: str, choices: list[str], hint: str | None, question_index: int, total_questions: int) -> int | None:
     """Display a question prompt, list choices, and optionally provide a hint.
 
     Handles input validation and returns the 0-indexed selection.
@@ -146,8 +146,8 @@ def display_question_and_get_choice(category: str, question: str, choices: list[
     :type question_index: int
     :param total_questions: The total number of questions in the quiz.
     :type total_questions: int
-    :return: The 0-based index of the user's selected choice.
-    :rtype: int
+    :return: The 0-based index of the user's selected choice. Returns None if the user chooses to exit.
+    :rtype: int | None
     """
 
     print("\033[0;39;104m\nCategory:\033[0m \033[1;32m" + category + "\033[0m")
@@ -161,17 +161,21 @@ def display_question_and_get_choice(category: str, question: str, choices: list[
 
     while True:
         try:
-            user_input = input("\nYour answer (1-4): ")
+            user_input = input("\nYour answer (1-4) or 'q' to quit: ").strip()
+
+            if user_input.lower() == "q":
+                return None
+
             if user_input.isdigit():
                 choice_index = int(user_input) - 1
                 if 0 <= choice_index < len(choices):
                     return choice_index
                 else:
-                    print("\n\033[1;31mInvalid input. Please enter a number between 1 and 4.\033[0m")
+                    print("\n\033[1;31mInvalid input. Please enter a number between 1 and 4. Or 'q' to quit.\033[0m")
             else:
-                print("\n\033[1;31mInvalid input. Please enter a number.\033[0m")
+                print("\n\033[1;31mInvalid input. Please enter a number. Or 'q' to quit.\033[0m")
         except ValueError:
-            print("\n\033[1;31mInvalid input. Please enter a number.\033[0m")
+            print("\n\033[1;31mInvalid input. Please enter a number. Or 'q' to quit.\033[0m")
 
 
 def display_result(is_correct: bool, correct_choice: str) -> None:
@@ -203,12 +207,16 @@ def display_summary(current_session_record: dict) -> None:
     number_of_questions_attempted = current_session_record.get("questions_attempted", 0)
     total_questions = current_session_record.get("total_questions", 0)
 
-    print("\033[1;93m★ ★ ★  \033[1;92mQUIZ SUMMARY\033[1;93m  ★ ★ ★\033[0m\n")
+    # Calculate percentage based on attempted questions, avoiding division by zero
+    percentage = (correct_answers / number_of_questions_attempted * 100) if number_of_questions_attempted > 0 else 0.0
+
+    print("\n\033[1;93m★ ★ ★  \033[1;92mQUIZ SUMMARY\033[1;93m  ★ ★ ★\033[0m\n")
     print(f"Score: {score} / {10 * number_of_questions_attempted}")
-    print(f"Correct Answers / Questions Attempted: {correct_answers}/{number_of_questions_attempted}")
-    print(f"Incorrect Answers / Questions Attempted: {incorrect_answers}/{number_of_questions_attempted}")
-    print(f"Percentage based on attempted questions: {correct_answers / number_of_questions_attempted * 100:.2f}%")
+    print(f"Correct Answers / Questions Attempted: {correct_answers} / {number_of_questions_attempted}")
+    print(f"Incorrect Answers / Questions Attempted: {incorrect_answers} / {number_of_questions_attempted}")
+    print(f"Percentage based on attempted questions: {percentage:.1f}%")
     print(f"Total Questions in {category} ({difficulty}): {total_questions}")
+    print(f"Questions Attempted: {number_of_questions_attempted}")
 
     # Clear the screen after displaying the summary
     wait_and_clear_screen()

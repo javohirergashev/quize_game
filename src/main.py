@@ -75,6 +75,10 @@ def start_quiz() -> None:
 
             user_choice = menu.display_question_and_get_choice(quiz_session["category"], question["question"], question["choices"], question.get("hint"), index, quiz_session["total_questions"])
 
+            # If the user chooses to exit (user_choice is None), break out of the loop
+            if user_choice is None:
+                break
+
             if user_choice == question["answer"]:
                 menu.display_result(True, question["choices"][user_choice])
                 quiz_session["correct_answers"] += 1
@@ -86,7 +90,7 @@ def start_quiz() -> None:
             quiz_session["questions_attempted"] += 1
             menu.wait_and_clear_screen()
 
-        # Display the final score summary after the quiz session
+        # Display the summary after the quiz session
         menu.display_summary(
             quiz_session,
         )
