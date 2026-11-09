@@ -76,21 +76,21 @@ not a number.
 
 Your app must:
 
-- [ ] Show a menu of at least **four** options, one of which exits
-- [ ] Keep showing the menu until the user chooses to exit
-- [ ] Store its data in a **list of dictionaries**
-- [ ] Let the user **add** an item
-- [ ] Let the user **change or remove** an item
-- [ ] Display the stored items in a readable way
-- [ ] Split the work across **several functions**, each doing one job
-- [ ] Handle a bad menu choice without crashing
+- [x] Show a menu of at least **four** options, one of which exits
+- [x] Keep showing the menu until the user chooses to exit
+- [x] Store its data in a **list of dictionaries**
+- [x] Let the user **add** an item
+- [x] Let the user **change or remove** an item
+- [x] Display the stored items in a readable way
+- [x] Split the work across **several functions**, each doing one job
+- [x] Handle a bad menu choice without crashing
 
 Write your code in `src/`. Start in `src/main.py` and split into more files
 when one file gets hard to read.
 
 Then, two pieces of writing:
 
-- [ ] **Replace `README.md`** with a description of *your* project: what it
+- [ ] **Replace `README.md`** with a description of _your_ project: what it
       does, how to run it, and a usage example. Write it for someone who has
       never seen it. This is a real skill, and it is the first thing anyone
       looks at
