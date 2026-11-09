@@ -44,7 +44,7 @@ def display_setup_menu(categories: list[str]) -> tuple[str, str]:
 
     while True:
         print("\n\033[1;93m ★ ★ ★  \033[1;92mSelect Difficulty Level\033[1;93m  ★ ★ ★\033[0m\n")
-        difficulties = ["Easy", "Medium", "Hard"]
+        difficulties = ["Easy", "Normal", "Hard"]
         for index, difficulty in enumerate(difficulties, start=1):
             print(f"{index}. {difficulty}")
 
@@ -204,7 +204,7 @@ def display_summary(current_session_record: dict) -> None:
     total_questions = current_session_record.get("total_questions", 0)
 
     print("\033[1;93m★ ★ ★  \033[1;92mQUIZ SUMMARY\033[1;93m  ★ ★ ★\033[0m\n")
-    print(f"Final Score: {score}")
+    print(f"Score: {score} / {10 * number_of_questions_attempted}")
     print(f"Correct Answers / Questions Attempted: {correct_answers}/{number_of_questions_attempted}")
     print(f"Incorrect Answers / Questions Attempted: {incorrect_answers}/{number_of_questions_attempted}")
     print(f"Percentage based on attempted questions: {correct_answers / number_of_questions_attempted * 100:.2f}%")
