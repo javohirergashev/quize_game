@@ -136,3 +136,36 @@ def get_rules() -> str:
 
     with open(json_data_path, "r") as file:
         return json.load(file).get("QUIZ_RULES", "")
+
+
+def delete_high_score(username: str) -> bool:
+    """Delete the high score for the specified username.
+
+    :param username: The username whose high score should be deleted.
+    :type username: str
+    :return: True if the high score was deleted successfully, False otherwise.
+    :rtype: bool
+    """
+
+    username = username.lower()  # Ensure the username is in lower case for consistency
+
+    try:
+        # Read existing data
+        with open(json_data_path, "r") as file:
+            data = json.load(file)
+
+        # Check if the username exists in the high scores
+        if username in get_past_usernames():
+            del data["HIGH_SCORES"][username]
+
+            # Overwrite the file with updated data
+            with open(json_data_path, "w") as file:
+                json.dump(data, file, indent=4)
+
+            return True
+        else:
+            return False
+
+    except (FileNotFoundError, json.JSONDecodeError, KeyError, OSError) as e:
+        print(f"Failed to delete high score: {e}")
+        return False
