@@ -41,15 +41,21 @@ def get_menu_options() -> list[str]:
     return ["Start Quiz", "View High Scores", "Browse Categories", "Rules", "Exit"]
 
 
-def get_questions_for_category(category: str) -> list[dict]:
-    """Return a list of questions for the specified category.
+def get_questions_for_category(category: str, difficulty: str) -> list[dict]:
+    """Return a list of questions for the specified category and difficulty.
 
     :param category: The name of the category to retrieve questions for.
     :type category: str
+    :param difficulty: The difficulty level of the questions to retrieve (e.g., "easy", "medium", "hard").
+    :type difficulty: str
     :return: List of question dictionaries.
     :rtype: list[dict]
     """
-    return [question for question in quiz_data.QUIZ_DATA[category.lower()]]
+
+    if difficulty.lower() == "easy":
+        difficulty = "normal"  # Map "easy" to "normal" in the quiz data
+
+    return [question for question in quiz_data.QUIZ_DATA[category.lower()][difficulty.lower()]]
 
 
 def get_high_scores() -> list[dict]:

@@ -58,7 +58,33 @@ def start_quiz() -> None:
     quiz_session = init_quiz_session()
     quiz_session["category"], quiz_session["difficulty"] = menu.show_setup_menu(quiz.get_category())
 
-    # while True:
+    while True:
+        questions = quiz.get_questions_for_category(quiz_session["category"], quiz_session["difficulty"])
+
+        if not questions:
+            print(f"\n\033[0;91;49mNo questions available for category '{quiz_session['category']}'.\033[0m")
+            break
+
+        for question in questions:
+            # If the difficulty is not "easy", remove the hint from the question dictionary
+            if quiz_session["difficulty"].lower() != "easy":
+                question["hint"] = None
+
+            user_choice = menu.display_question_and_get_choice(
+                quiz_session["category"],
+                question["question"],
+                question["choices"],
+                question.get("hint"),
+            )
+
+            if user_choice == question["answer"]:
+                menu.display_result(True, question["choices"][user_choice])
+            else:
+                menu.display_result(False, question["choices"][user_choice])
+
+            menu.wait_and_clear_screen()
+
+        main(False)  # Return to main menu after finishing the quiz
 
 
 def main(first_run=True) -> None:

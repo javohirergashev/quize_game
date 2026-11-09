@@ -129,11 +129,13 @@ def get_user_info() -> str:
     """
 
 
-def display_question_and_get_choice(question: str, choices: list[str], hint: str | None) -> int:
+def display_question_and_get_choice(category: str, question: str, choices: list[str], hint: str | None) -> int:
     """Display a question prompt, list choices, and optionally provide a hint.
 
     Handles input validation and returns the 0-indexed selection.
 
+    :param category: The category of the question being asked.
+    :type category: str
     :param question: The question text to display.
     :type question: str
     :param choices: List of answer choices to present to the user.
@@ -143,6 +145,29 @@ def display_question_and_get_choice(question: str, choices: list[str], hint: str
     :return: The 0-based index of the user's selected choice.
     :rtype: int
     """
+
+    print("\033[0;39;104m\nCategory:\033[0m \033[1;32m" + category + "\033[0m")
+    print("\033[0;39;104mQuestion:\033[0m \033[1;32m" + question + "\033[0m")
+
+    for i, choice in enumerate(choices, start=1):
+        print(f"\033[1;32m{i}.\033[0m {choice}")
+
+    if hint:
+        print(f"\n\033[1;96mHint:\033[0m \033[1;97m{hint}\033[0m")
+
+    while True:
+        try:
+            user_input = input("\nYour answer (1-4): ")
+            if user_input.isdigit():
+                choice_index = int(user_input) - 1
+                if 0 <= choice_index < len(choices):
+                    return choice_index
+                else:
+                    print("\n\033[1;31mInvalid input. Please enter a number between 1 and 4.\033[0m")
+            else:
+                print("\n\033[1;31mInvalid input. Please enter a number.\033[0m")
+        except ValueError:
+            print("\n\033[1;31mInvalid input. Please enter a number.\033[0m")
 
 
 def display_result(is_correct: bool, correct_choice: str) -> None:
