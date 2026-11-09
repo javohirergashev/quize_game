@@ -188,21 +188,27 @@ def display_result(is_correct: bool, correct_choice: str) -> None:
         print(f"\n\033[1;31mIncorrect.\033[0m Your choice was {correct_choice}.")
 
 
-def display_summary(score: int, correct_answers: int, total_questions: int) -> None:
+def display_summary(current_session_record: dict) -> None:
     """Display the final score summary after the quiz session.
 
-    :param score: The user's final score. Score is presented as a percentage of correct answers out of number of questions attempted.
-    :type score: int
-    :param correct_answers: The number of questions the user answered correctly.
-    :type correct_answers: int
-    :param total_questions: The total number of questions in chosen category and difficulty level. This is used to calculate the percentage score.
-    :type total_questions: int
+    :param current_session_record: Dictionary containing the current quiz session's data.
+    :type current_session_record: dict
     """
+
+    category = current_session_record.get("category", "N/A")
+    difficulty = current_session_record.get("difficulty", "N/A")
+    score = current_session_record.get("score", 0)
+    correct_answers = current_session_record.get("correct_answers", 0)
+    incorrect_answers = current_session_record.get("incorrect_answers", 0)
+    number_of_questions_attempted = current_session_record.get("questions_attempted", 0)
+    total_questions = current_session_record.get("total_questions", 0)
 
     print("\033[1;93m★ ★ ★  \033[1;92mQUIZ SUMMARY\033[1;93m  ★ ★ ★\033[0m\n")
     print(f"Final Score: {score}")
-    print(f"Correct Answers: {correct_answers}/{total_questions}")
-    print(f"Percentage: {correct_answers / total_questions * 100:.2f}%")
+    print(f"Correct Answers / Questions Attempted: {correct_answers}/{number_of_questions_attempted}")
+    print(f"Incorrect Answers / Questions Attempted: {incorrect_answers}/{number_of_questions_attempted}")
+    print(f"Percentage based on attempted questions: {correct_answers / number_of_questions_attempted * 100:.2f}%")
+    print(f"Total Questions in {category} ({difficulty}): {total_questions}")
 
     # Clear the screen after displaying the summary
     wait_and_clear_screen()
