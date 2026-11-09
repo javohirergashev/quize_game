@@ -11,7 +11,7 @@ import sys
 def wait_and_clear_screen() -> None:
     """Prompt the user to press Enter, then clear the terminal screen."""
     input("\nPress \033[32mEnter\033[0m to continue...")
-    sys.stdout.write("\033[2J\033[3;1H")
+    sys.stdout.write("\033[2J\033[1;1H")
     sys.stdout.flush()
 
 
@@ -26,7 +26,7 @@ def display_setup_menu(categories: list[str]) -> tuple[str, str]:
 
     while True:
         print("\n\033[1;39;49mSetup Menu:\033[0m\n")
-        print("\n\033[1;93m ★ ★ ★  \033[1;92mAvailable Categories\033[1;93m  ★ ★ ★\033[0m\n")
+        print("\n\033[1;93m ★ ★ ★  \033[1;92mChoose Categories\033[1;93m  ★ ★ ★\033[0m\n")
         for index, category in enumerate(categories, start=1):
             print(f"{index}. {category}")
 
@@ -86,9 +86,9 @@ def display_main_menu(menu) -> int:
                     wait_and_clear_screen()
                 return choice - 1
             else:
-                print(f"\n\033[0;91;49mInvalid Choice.\033[0m Please enter a number between \033[32m1 and {len(menu)}.\033[0m")
+                print(f"\n\033[0;91;49mInvalid Choice.\033[0m Please enter a number between\033[0;36;49m 1 and {len(menu)}.\033[0m")
         except ValueError:
-            print("\nInvalid input. Please enter a number.")
+            print("\n\033[1;31mInvalid input.\033[0m Please enter a number.")
 
         wait_and_clear_screen()
 
@@ -101,12 +101,28 @@ def display_rules(rule: str) -> None:
     print(rule)
 
 
-def show_high_scores(high_scores: list[dict]) -> None:
+def display_high_scores(high_scores: list[dict]) -> None:
     """Display past high scores.
 
-    :param high_scores: List of dicts representing past user scores and dates.
+    :param high_scores: List of dicts representing past user sessions data.
     :type high_scores: list[dict]
     """
+
+    if not high_scores:
+        print("\n\033[1;93m ★ ★ ★  \033[1;92mNo High Scores Yet\033[1;93m  ★ ★ ★\033[0m\n")
+        return
+
+    print("\n\033[1;93m ★ ★ ★  \033[1;92mHigh Scores\033[1;93m  ★ ★ ★\033[0m\n")
+    for index, score_record in enumerate(high_scores, start=1):
+        player_name = score_record.get("player_name", "N/A")
+        score = score_record.get("score", 0)
+        category = score_record.get("category", "N/A")
+        difficulty = score_record.get("difficulty", "N/A")
+        date = score_record.get("date", "N/A")
+        max_score = score_record.get("total_questions", 0) * 10  # Assuming each question is worth 10 points
+
+        print(f"{index}. \033[1;36m{player_name.capitalize()}\033[0m - Score: {score} / {max_score} - Category: {category} - Difficulty: {difficulty} - Date (mm/dd/yy): {date}")
+        print(f"\t\033[1;32mCorrect Answers: {score_record.get('correct_answers', 0)}\033[0m, \033[1;31mIncorrect Answers: {score_record.get('incorrect_answers', 0)}\033[0m")
 
 
 def display_category_info(categories: list[tuple[str, int]]) -> None:
@@ -127,6 +143,9 @@ def get_user_info() -> str:
     :return: The trimmed username entered by the player.
     :rtype: str
     """
+
+    print("\n\033[1;93m ★ ★ ★  \033[1;92mEnter Your Username\033[1;93m  ★ ★ ★\033[0m\n")
+    return input("Name (leave blank to not record your score): ").strip()
 
 
 def display_question_and_get_choice(category: str, question: str, choices: list[str], hint: str | None, question_index: int, total_questions: int) -> int | None:
@@ -150,7 +169,7 @@ def display_question_and_get_choice(category: str, question: str, choices: list[
     :rtype: int | None
     """
 
-    print("\033[0;39;104m\nCategory:\033[0m \033[1;32m" + category + "\033[0m")
+    print("\033[0;30;46m\nCategory:\033[0m \033[1;32m" + category + "\033[0m")
     print(f"\033[0;39;100mQuestion ({question_index}/{total_questions}):\033[0m \033[1;32m" + question + "\033[0m")
 
     for i, choice in enumerate(choices, start=1):
@@ -211,12 +230,12 @@ def display_summary(current_session_record: dict) -> None:
     percentage = (correct_answers / number_of_questions_attempted * 100) if number_of_questions_attempted > 0 else 0.0
 
     print("\n\033[1;93m★ ★ ★  \033[1;92mQUIZ SUMMARY\033[1;93m  ★ ★ ★\033[0m\n")
-    print(f"Score: {score} / {10 * number_of_questions_attempted}")
-    print(f"Correct Answers / Questions Attempted: {correct_answers} / {number_of_questions_attempted}")
-    print(f"Incorrect Answers / Questions Attempted: {incorrect_answers} / {number_of_questions_attempted}")
-    print(f"Percentage based on attempted questions: {percentage:.1f}%")
-    print(f"Total Questions in {category} ({difficulty}): {total_questions}")
+    print(f"Score: {score} / {10 * total_questions} (10 points per question)")
+    print(f"Correct Answers: {correct_answers}")
+    print(f"Incorrect Answers: {incorrect_answers}")
+    print(f"Percentage based on attempted questions: {round(percentage)}%")
     print(f"Questions Attempted: {number_of_questions_attempted}")
+    print(f"Total Questions in {category} ({difficulty}): {total_questions}")
 
     # Clear the screen after displaying the summary
     wait_and_clear_screen()

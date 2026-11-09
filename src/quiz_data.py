@@ -389,7 +389,7 @@ WHITE = "\033[1;97m"
 DIM = "\033[2;37m"
 RESET = "\033[0m"
 
-QUIZ_RULES: str = f"""\n\n
+QUIZ_RULES: str = f"""\n
         {GOLD}★ ★ ★  {GREEN}HOW TO PLAY : RULES & DIRECTIVES{GOLD}  ★ ★ ★{RESET}
 
   {CYAN}[1] SELECTION{RESET}
@@ -411,3 +411,17 @@ QUIZ_RULES: str = f"""\n\n
         {WHITE}Handles must be unique across the board—no duplicates allowed.{RESET}
         {DIM}Leave the alias blank at the end if you prefer not to register.{RESET}
 """
+
+HIGH_SCORES = {
+    "javohir": {
+        "player_name": "javohir",
+        "score": 80,
+        "total_questions": 8,
+        "correct_answers": 8,
+        "incorrect_answers": 0,
+        "questions_attempted": 8,
+        "category": "science",
+        "difficulty": "hard",
+        "date": "11/09/26",
+    }
+}

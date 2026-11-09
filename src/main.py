@@ -1,3 +1,4 @@
+import datetime
 import sys
 
 import menu
@@ -49,7 +50,7 @@ def init_quiz_session() -> dict:
         "questions_attempted": 0,
         "category": None,
         "difficulty": None,
-        "date": None,
+        "date": datetime.date.today().strftime("%m/%d/%y"),
     }
 
 
@@ -95,7 +96,45 @@ def start_quiz() -> None:
             quiz_session,
         )
 
+        # Prompt the user for a username and save their score to the high scores list
+        if quiz_session["questions_attempted"] == quiz_session["total_questions"]:
+            get_username_and_save_score(quiz_session)
+        else:
+            print("\n\033[1;31mYour session was not saved.\033[0m")
+            menu.wait_and_clear_screen()
+
         main(False)  # Return to main menu after finishing the quiz
+
+
+def get_username_and_save_score(quiz_session: dict) -> None:
+    """Prompt the user for a username and save their score to the high scores list.
+
+    :param quiz_session: A dictionary containing the current quiz session's data.
+    :type quiz_session: dict
+    :return: None
+    """
+    while True:
+        username = menu.get_user_info()
+
+        if username:
+            quiz_session["player_name"] = username
+
+            # check if the username already exists in the high scores
+            existing_usernames = quiz.get_past_usernames()
+            if any(username.lower() == existing_username for existing_username in existing_usernames):
+                print(f"\n\033[1;31mUsername '{username}' already exists in the high scores. Please choose a different name.\033[0m")
+                continue  # Prompt for username again
+
+            is_score_saved = quiz.save_high_score(quiz_session)
+
+            if is_score_saved:
+                print(f"\n\033[1;32mScore saved successfully for {username}!\033[0m")
+                break  # Exit the loop after saving the score
+            else:
+                print(f"\n\033[1;31mFailed to save score for {username}.\033[0m")
+                continue  # Prompt for username again
+        else:
+            break  # Exit the loop if the user does not provide a username
 
 
 def main(first_run=True) -> None:

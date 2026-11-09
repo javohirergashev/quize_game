@@ -59,11 +59,25 @@ def get_questions_for_category(category: str, difficulty: str) -> list[dict]:
 
 
 def get_high_scores() -> list[dict]:
-    """Return a list of past high scores.
+    """Return a list of past high scores. Sorted in descending order by score.
 
-    :return: List of dicts representing past user scores and dates.
+    :return: List of dictionaries representing past user session data.
     :rtype: list[dict]
     """
+
+    if not quiz_data.HIGH_SCORES:
+        return []
+
+    return sorted(quiz_data.HIGH_SCORES.values(), key=lambda x: x["score"], reverse=True)
+
+
+def get_past_usernames() -> list[str]:
+    """Return a list of past usernames in all lower case from the high scores.
+
+    :return: List of usernames.
+    :rtype: list[str]
+    """
+    return [username for username in quiz_data.HIGH_SCORES]
 
 
 def save_high_score(session_dict: dict) -> bool:
@@ -74,6 +88,8 @@ def save_high_score(session_dict: dict) -> bool:
     :return: True if the score was saved successfully, False otherwise.
     :rtype: bool
     """
+    quiz_data.HIGH_SCORES[session_dict["player_name"].lower()] = session_dict
+    return True
 
 
 def get_rules() -> str:
