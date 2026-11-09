@@ -59,11 +59,14 @@ def start_quiz() -> None:
     quiz_session["category"], quiz_session["difficulty"] = menu.show_setup_menu(quiz.get_category())
 
     while True:
+        # Get the list of questions for the selected category and difficulty
         questions = quiz.get_questions_for_category(quiz_session["category"], quiz_session["difficulty"])
 
         if not questions:
             print(f"\n\033[0;91;49mNo questions available for category '{quiz_session['category']}'.\033[0m")
             break
+
+        quiz_session["total_questions"] = len(questions)
 
         for question in questions:
             # If the difficulty is not "easy", remove the hint from the question dictionary
@@ -79,10 +82,17 @@ def start_quiz() -> None:
 
             if user_choice == question["answer"]:
                 menu.display_result(True, question["choices"][user_choice])
+                quiz_session["correct_answers"] += 1
+                quiz_session["score"] += 10  # Award points for correct answers
             else:
                 menu.display_result(False, question["choices"][user_choice])
+                quiz_session["incorrect_answers"] += 1
 
+            quiz_session["total_questions"] += 1
             menu.wait_and_clear_screen()
+
+        # Calculate the percentage of correct answers
+        quiz_session["percentage"] = round((quiz_session["correct_answers"] / quiz_session["total_questions"]) * 100, 2)
 
         main(False)  # Return to main menu after finishing the quiz
 
