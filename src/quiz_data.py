@@ -393,19 +393,21 @@ QUIZ_RULES: str = f"""\n\n
         {GOLD}★ ★ ★  {GREEN}HOW TO PLAY : RULES & DIRECTIVES{GOLD}  ★ ★ ★{RESET}
 
   {CYAN}[1] SELECTION{RESET}
-      {WHITE}• Pick a challenge category and difficulty mode to begin.{RESET}
-
+        {WHITE}Pick a challenge category and difficulty mode to begin.{RESET}
   {CYAN}[2] DIFFICULTY MODES{RESET}
-      {WHITE}• {GREEN}Easy{WHITE}   : Standard questions with helpful tactical hints.{RESET}
-      {WHITE}• {GOLD}Normal{WHITE} : Standard questions without hints.{RESET}
-      {WHITE}• {CYAN}Hard{WHITE}   : Advanced questions designed to test your limits.{RESET}
-
+        {GREEN}Easy{WHITE}   : Standard questions with helpful tactical hints.{RESET}
+        {GOLD}Normal{WHITE} : Standard questions without hints.{RESET}
+        {CYAN}Hard{WHITE}   : Advanced questions designed to test your limits.{RESET}
   {CYAN}[3] SCORING{RESET}
-      {WHITE}• Enter the matching number (1-4) for each prompt.{RESET}
-      {WHITE}• Correct answers yield 10 points; wrong guesses carry no penalty.{RESET}
-
-  {CYAN}[4] LEADERBOARD & ALIASES{RESET}
-      {WHITE}• Submit an {GOLD}alias or username{WHITE} after the run to log your score.{RESET}
-      {WHITE}• Handles must be unique across the board—no duplicates allowed.{RESET}
-      {DIM}• Leave the alias blank at the end if you prefer not to register.{RESET}
+        {WHITE}Enter the matching number (1-4) for each question prompt.{RESET}
+        {WHITE}Correct answers yield 10 points; wrong guesses carry no penalty.{RESET}
+  {CYAN}[4] MID-QUIZ EXIT{RESET}
+        {WHITE}During an active quiz round, type {GOLD}'q'{WHITE} or {GOLD}'exit'{WHITE} at the question prompt to leave early.{RESET}
+        {DIM}(For menus and setup screens, use the dedicated numbered 'Exit' option instead.){RESET}
+        {WHITE}Exiting mid-quiz immediately generates your {CYAN}Quiz Summary{WHITE} for questions attempted so far.{RESET}
+        {DIM}Early exits are unranked: your score will not be saved to the leaderboard, and you will not be prompted for an alias.{RESET}
+  {CYAN}[5] LEADERBOARD & ALIASES{RESET}
+        {WHITE}Submit an {GOLD}alias or username{WHITE} after completing a full run to log your score.{RESET}
+        {WHITE}Handles must be unique across the board—no duplicates allowed.{RESET}
+        {DIM}Leave the alias blank at the end if you prefer not to register.{RESET}
 """
