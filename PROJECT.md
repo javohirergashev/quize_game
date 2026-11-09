@@ -90,11 +90,11 @@ when one file gets hard to read.
 
 Then, two pieces of writing:
 
-- [ ] **Replace `README.md`** with a description of _your_ project: what it
+- [x] **Replace `README.md`** with a description of _your_ project: what it
       does, how to run it, and a usage example. Write it for someone who has
       never seen it. This is a real skill, and it is the first thing anyone
       looks at
-- [ ] **Fill in `REFLECTIONS.md`**
+- [x] **Fill in `REFLECTIONS.md`**
 
 ## Ideas
 
