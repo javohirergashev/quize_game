@@ -12,6 +12,18 @@ WHITE = "\033[1;97m"
 DIM = "\033[2;37m"
 RESET = "\033[0m"
 
+quiz_session = {
+    "player_name": None,
+    "score": 0,
+    "total_questions": 0,
+    "correct_answers": 0,
+    "incorrect_answers": 0,
+    "questions_attempted": 0,
+    "category": None,
+    "difficulty": None,
+    "date": datetime.date.today().strftime("%m/%d/%y"),
+}  # Initialize a new quiz session with default values
+
 
 def print_welcome() -> None:
     """Clear screen and display arcade welcome"""
@@ -35,28 +47,25 @@ def print_goodbye() -> None:
     """)
 
 
-def init_quiz_session() -> dict:
-    """Initialize a new quiz session with default values.
-
-    :return: A dictionary representing the initial state of the quiz session.
-    :rtype: dict
+def start_quiz(quiz_session: dict) -> None:
+    """Start the quiz game by initializing a session and displaying the setup menu.
+    :param quiz_session: A dictionary representing the current quiz session's data.
+    :type quiz_session: dict
     """
-    return {
-        "player_name": None,
-        "score": 0,
-        "total_questions": 0,
-        "correct_answers": 0,
-        "incorrect_answers": 0,
-        "questions_attempted": 0,
-        "category": None,
-        "difficulty": None,
-        "date": datetime.date.today().strftime("%m/%d/%y"),
-    }
 
+    quiz_session.update(
+        {
+            "score": 0,
+            "total_questions": 0,
+            "correct_answers": 0,
+            "incorrect_answers": 0,
+            "questions_attempted": 0,
+            "category": None,
+            "difficulty": None,
+            "date": datetime.date.today().strftime("%m/%d/%y"),
+        }
+    )
 
-def start_quiz() -> None:
-    """Start the quiz game by initializing a session and displaying the setup menu."""
-    quiz_session = init_quiz_session()
     quiz_session["category"], quiz_session["difficulty"] = menu.display_setup_menu(quiz.get_category())
 
     while True:
@@ -137,6 +146,25 @@ def get_username_and_save_score(quiz_session: dict) -> None:
             break  # Exit the loop if the user does not provide a username
 
 
+def delete_high_score(username: str) -> None:
+    """Check username and delete their high score if it exists.
+
+    :param username: The username of the user whose high score should be deleted.
+    :type username: str
+    :return: None
+    """
+
+    if username:
+        # Call the delete_high_score function from the quiz module to attempt deletion
+        is_deleted = quiz.delete_high_score(username)
+
+        # Display the result of the deletion attempt
+        menu.display_delete_high_score_result(is_deleted, username)
+
+    else:
+        print("\n\033[1;31mNo username provided. High score deletion canceled.\033[0m")
+
+
 def main(first_run=True) -> None:
     """Main entry point for the quiz game application."""
 
@@ -152,7 +180,7 @@ def main(first_run=True) -> None:
         sys.exit()  # Exit the program
 
     if user_choice == quiz_options.index("Start Quiz"):
-        start_quiz()  # Start the quiz if the user selected "Start Quiz"
+        start_quiz(quiz_session)  # Start the quiz if the user selected "Start Quiz"
         menu.wait_and_clear_screen()
         main(False)  # Restart the main menu after the quiz
 
@@ -160,6 +188,7 @@ def main(first_run=True) -> None:
         quiz_options.index("View High Scores"): lambda: menu.display_high_scores(quiz.get_high_scores()),
         quiz_options.index("Browse Categories"): lambda: menu.display_category_info(quiz.get_category_and_count()),
         quiz_options.index("Rules"): lambda: menu.display_rules(quiz.get_rules()),
+        quiz_options.index("Delete My High Score"): lambda: delete_high_score(quiz_session["player_name"]),
     }
 
     if user_choice in menu_actions:

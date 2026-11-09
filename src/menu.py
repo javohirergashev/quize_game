@@ -241,3 +241,15 @@ def display_summary(current_session_record: dict) -> None:
 
     # Clear the screen after displaying the summary
     wait_and_clear_screen()
+
+
+def display_delete_high_score_result(is_deleted: bool, username) -> None:
+    """Prompt the user to enter their username to delete their high score.
+
+    :param is_deleted: True if the high score was deleted successfully, False otherwise.
+    """
+    if is_deleted:
+        print(f"\n\033[1;32mHigh score for '{username}' deleted successfully!\033[0m")
+    else:
+        print(f"\n\033[1;31mNo high score found for '{username}'\033[0m")
+        print("\n\033[1;33mHigh score deletion canceled.\033[0m")
