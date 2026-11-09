@@ -82,7 +82,7 @@ def main(first_run=True) -> None:
 
     menu_actions = {
         quiz_options.index("View High Scores"): lambda: menu.show_high_scores(quiz.get_high_scores()),
-        quiz_options.index("Browse Categories"): lambda: menu.browse_categories(quiz.get_category_and_count()),
+        quiz_options.index("Browse Categories"): lambda: menu.display_category_info(quiz.get_category_and_count()),
         quiz_options.index("Rules"): lambda: menu.show_rules(quiz.get_rules()),
     }
 

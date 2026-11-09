@@ -11,7 +11,7 @@ import sys
 def wait_and_clear_screen() -> None:
     """Prompt the user to press Enter, then clear the terminal screen."""
     input("\nPress \033[32mEnter\033[0m to continue...")
-    sys.stdout.write("\033[2J\033[H")
+    sys.stdout.write("\033[2J\033[3;1H")
     sys.stdout.flush()
 
 
@@ -26,7 +26,7 @@ def show_setup_menu(categories: list[str]) -> tuple[str, str]:
 
     while True:
         print("\n\033[1;39;49mSetup Menu:\033[0m\n")
-        print("Available Categories:")
+        print("\n\033[1;93m ★ ★ ★  \033[1;92mAvailable Categories\033[1;93m  ★ ★ ★\033[0m\n")
         for index, category in enumerate(categories, start=1):
             print(f"{index}. {category}")
 
@@ -43,7 +43,7 @@ def show_setup_menu(categories: list[str]) -> tuple[str, str]:
         wait_and_clear_screen()
 
     while True:
-        print("\nSelect Difficulty Level:")
+        print("\n\033[1;93m ★ ★ ★  \033[1;92mSelect Difficulty Level\033[1;93m  ★ ★ ★\033[0m\n")
         difficulties = ["Easy", "Medium", "Hard"]
         for index, difficulty in enumerate(difficulties, start=1):
             print(f"{index}. {difficulty}")
@@ -109,12 +109,16 @@ def show_high_scores(high_scores: list[dict]) -> None:
     """
 
 
-def browse_categories(categories: list[tuple[str, int]]) -> None:
+def display_category_info(categories: list[tuple[str, int]]) -> None:
     """Display available categories and the total question count for each.
 
     :param categories: List of tuples containing (category_name, question_count).
     :type categories: list[tuple[str, int]]
     """
+    print("\n\033[1;93m ★ ★ ★  \033[1;92mAvailable Info\033[1;93m  ★ ★ ★\033[0m\n")
+
+    for index, (category, count) in enumerate(categories, start=1):
+        print(f"\033[1;32m{index}. {category}:\033[0m {count} questions available.")
 
 
 def get_user_info() -> str:
