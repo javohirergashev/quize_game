@@ -107,7 +107,7 @@ def start_quiz(quiz_session: dict) -> None:
 
         # Prompt the user for a username and save their score to the high scores list
         if quiz_session["questions_attempted"] == quiz_session["total_questions"]:
-            get_username_and_save_score(quiz_session)
+            save_score(quiz_session)
         else:
             print("\n\033[1;31mYour session was not saved.\033[0m")
             menu.wait_and_clear_screen()
@@ -115,15 +115,19 @@ def start_quiz(quiz_session: dict) -> None:
         main(False)  # Return to main menu after finishing the quiz
 
 
-def get_username_and_save_score(quiz_session: dict) -> None:
+def save_score(quiz_session: dict) -> None:
     """Prompt the user for a username and save their score to the high scores list.
 
     :param quiz_session: A dictionary containing the current quiz session's data.
     :type quiz_session: dict
     :return: None
     """
+
+    username = quiz_session.get("player_name")
+
     while True:
-        username = menu.get_user_info()
+        if username is None:
+            username = menu.prompt_for_username()  # Prompt for username if not already set
 
         if username:
             quiz_session["player_name"] = username
@@ -132,6 +136,7 @@ def get_username_and_save_score(quiz_session: dict) -> None:
             existing_usernames = quiz.get_past_usernames()
             if any(username.lower() == existing_username for existing_username in existing_usernames):
                 print(f"\n\033[1;31mUsername '{username}' already exists in the high scores. Please choose a different name.\033[0m")
+                username = None  # Reset username to prompt for a new one
                 continue  # Prompt for username again
 
             is_score_saved = quiz.save_high_score(quiz_session)
@@ -165,6 +170,35 @@ def delete_high_score(username: str) -> None:
         print("\n\033[1;31mNo username provided. High score deletion canceled.\033[0m")
 
 
+def edit_username(current_username: str) -> None:
+    """Edit the username in the high scores list.
+
+    :param current_username: The current username of the user.
+    :type current_username: str
+    :return: None
+    """
+
+    if current_username:
+        new_username = menu.prompt_for_username(current_username)
+
+        if len(new_username) > 0 and new_username != current_username:
+            # Call the edit_username function from the quiz module to attempt editing
+            (is_success, change_message) = quiz.edit_username(current_username, new_username)
+
+            if is_success:
+                quiz_session["player_name"] = new_username  # Update the current session's username if edit is successful
+
+            # Display the result of the edit attempt
+            menu.display_edit_username_result(change_message)
+        else:
+            print("\n\033[1;31mNo new username provided. Username edit canceled.\033[0m")
+    else:
+        new_username = menu.prompt_for_username()
+        quiz_session["player_name"] = new_username
+
+        print(f"\n\033[1;32mUsername set to '{new_username}'.\033[0m")
+
+
 def main(first_run=True) -> None:
     """Main entry point for the quiz game application."""
 
@@ -189,6 +223,8 @@ def main(first_run=True) -> None:
         quiz_options.index("Browse Categories"): lambda: menu.display_category_info(quiz.get_category_and_count()),
         quiz_options.index("Rules"): lambda: menu.display_rules(quiz.get_rules()),
         quiz_options.index("Delete My High Score"): lambda: delete_high_score(quiz_session["player_name"]),
+        quiz_options.index("See Username"): lambda: menu.display_current_username(quiz_session["player_name"]),
+        quiz_options.index("Edit/Set Username"): lambda: edit_username(quiz_session["player_name"]),
     }
 
     if user_choice in menu_actions:

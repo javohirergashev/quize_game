@@ -699,12 +699,36 @@
     },
     "QUIZ_RULES": "\n        \u001b[1;93m\u2605 \u2605 \u2605  \u001b[1;92mHOW TO PLAY : RULES & DIRECTIVES\u001b[1;93m  \u2605 \u2605 \u2605\u001b[0m\n\n  \u001b[1;96m[1] SELECTION\u001b[0m\n        \u001b[1;97mPick a challenge category and difficulty mode to begin.\u001b[0m\n  \u001b[1;96m[2] DIFFICULTY MODES\u001b[0m\n        \u001b[1;92mEasy\u001b[1;97m   : Standard questions with helpful tactical hints.\u001b[0m\n        \u001b[1;93mNormal\u001b[1;97m : Standard questions without hints.\u001b[0m\n        \u001b[1;96mHard\u001b[1;97m   : Advanced questions designed to test your limits.\u001b[0m\n  \u001b[1;96m[3] SCORING\u001b[0m\n        \u001b[1;97mEnter the matching number (1-4) for each question prompt.\u001b[0m\n        \u001b[1;97mCorrect answers yield 10 points; wrong guesses carry no penalty.\u001b[0m\n  \u001b[1;96m[4] MID-QUIZ EXIT\u001b[0m\n        \u001b[1;97mDuring an active quiz round, type \u001b[1;93m'q'\u001b[1;97m or \u001b[1;93m'exit'\u001b[1;97m at the question prompt to leave early.\u001b[0m\n        \u001b[2;37m(For menus and setup screens, use the dedicated numbered 'Exit' option instead.)\u001b[0m\n        \u001b[1;97mExiting mid-quiz immediately generates your \u001b[1;96mQuiz Summary\u001b[1;97m for questions attempted so far.\u001b[0m\n        \u001b[2;37mEarly exits are unranked: your score will not be saved to the leaderboard, and you will not be prompted for an alias.\u001b[0m\n  \u001b[1;96m[5] LEADERBOARD & ALIASES\u001b[0m\n        \u001b[1;97mSubmit an \u001b[1;93malias or username\u001b[1;97m after completing a full run to log your score.\u001b[0m\n        \u001b[1;97mUsernames must be unique across the board\u2014no duplicates allowed.\u001b[0m\n        \u001b[2;37mLeave the alias blank at the end if you prefer not to register.\u001b[0m\n",
     "HIGH_SCORES": {
+        "javohir": {
+            "player_name": "Javohir",
+            "score": 80,
+            "total_questions": 8,
+            "correct_answers": 8,
+            "incorrect_answers": 0,
+            "questions_attempted": 8,
+            "category": "Science",
+            "difficulty": "Easy",
+            "date": "11/09/26"
+        },
+        "max": {
+            "player_name": "Max",
+            "score": 80,
+            "total_questions": 8,
+            "correct_answers": 8,
+            "incorrect_answers": 0,
+            "questions_attempted": 8,
+            "category": "Science",
+            "difficulty": "Easy",
+            "date": "11/09/26"
+        }
     },
     "MENU_OPTIONS": [
         "Start Quiz",
         "View High Scores",
         "Browse Categories",
         "Rules",
+        "See Username",
+        "Edit/Set Username",
         "Delete My High Score",
         "Exit"
     ]

@@ -139,15 +139,17 @@ def display_category_info(categories: list[tuple[str, int]]) -> None:
         print(f"\033[1;32m{index}. {category}:\033[0m {count} questions available.")
 
 
-def get_user_info() -> str:
+def prompt_for_username(current_username: str | None = None) -> str:
     """Prompt the user to enter their name for score tracking.
 
+    :param current_username: The current username of the player, if any.
+    :type current_username: str or None
     :return: The trimmed username entered by the player.
     :rtype: str
     """
 
     print("\n\033[1;93m ★ ★ ★  \033[1;92mEnter Your Username\033[1;93m  ★ ★ ★\033[0m\n")
-    return input("Name (leave blank to not record your score): ").strip()
+    return input(f"Username (current: {current_username if current_username else 'Not set'}) (leave blank to skip): ").strip()
 
 
 def display_question_and_get_choice(category: str, question: str, choices: list[str], hint: str | None, question_index: int, total_questions: int) -> int | None:
@@ -253,3 +255,29 @@ def display_delete_high_score_result(is_deleted: bool, username) -> None:
     else:
         print(f"\n\033[1;31mNo high score found for '{username}'\033[0m")
         print("\n\033[1;33mHigh score deletion canceled.\033[0m")
+
+
+def display_edit_username_result(change_message: str) -> None:
+    """Display the result of a username edit operation.
+
+    :param change_message: Message indicating the result of the username change.
+    :type change_message: str
+    :return: None
+    :rtype: None
+    """
+
+    print(f"\n\033[1;93m{change_message}\033[0m")
+
+
+def display_current_username(username: str) -> None:
+    """Display the current username to the user.
+
+    :param username: The current username of the user.
+    :type username: str
+    :return: None
+    :rtype: None
+    """
+    if username:
+        print(f"\n\033[1;93mYour current username is:\033[0m \033[1;32m{username}\033[0m")
+    else:
+        print("\n\033[1;93mYou have not set a username yet.\033[0m")

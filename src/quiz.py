@@ -169,3 +169,41 @@ def delete_high_score(username: str) -> bool:
     except (FileNotFoundError, json.JSONDecodeError, KeyError, OSError) as e:
         print(f"Failed to delete high score: {e}")
         return False
+
+
+def edit_username(old_username: str, new_username: str) -> dict:
+    """Edit the username in the high scores list.
+
+    :param old_username: The current username of the user.
+    :type old_username: str
+    :param new_username: The new username to replace the old one.
+    :type new_username: str
+    :return: A dictionary containing the result of the edit operation.
+    :rtype: dict
+    """
+
+    old_username = old_username.lower()
+    new_username = new_username.lower()
+
+    try:
+        # Read existing data
+        with open(json_data_path, "r") as file:
+            data = json.load(file)
+
+        # Check if the old username exists and the new username does not already exist
+        if old_username in get_past_usernames() and new_username not in get_past_usernames():
+            data["HIGH_SCORES"][new_username] = data["HIGH_SCORES"].pop(old_username)
+            data["HIGH_SCORES"][new_username]["player_name"] = new_username  # Update the player_name in the session data
+
+            # Overwrite the file with updated data
+            with open(json_data_path, "w") as file:
+                json.dump(data, file, indent=4)
+
+            return {"is_success": True, "message": f"Username changed from '{old_username}' to '{new_username}' successfully."}
+        elif new_username in get_past_usernames():
+            return {"is_success": False, "message": f"Username '{new_username}' already exists in the high scores. Please choose a different name."}
+        else:
+            return {"is_success": False, "message": f"Username '{old_username}' does not exist in the high scores. Please finish the quiz and save your score first."}
+
+    except (FileNotFoundError, json.JSONDecodeError, KeyError, OSError) as e:
+        return {"is_success": False, "message": f"Failed to edit username: {e}"}
