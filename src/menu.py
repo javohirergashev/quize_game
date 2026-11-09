@@ -15,7 +15,7 @@ def wait_and_clear_screen() -> None:
     sys.stdout.flush()
 
 
-def show_setup_menu(categories: list[str]) -> tuple[str, str]:
+def display_setup_menu(categories: list[str]) -> tuple[str, str]:
     """Prompt the user to select a category and difficulty.
 
     :param categories: Available category names to display to the user.
@@ -63,7 +63,7 @@ def show_setup_menu(categories: list[str]) -> tuple[str, str]:
     return selected_category, selected_difficulty
 
 
-def show_main_menu(menu) -> int:
+def display_main_menu(menu) -> int:
     """Display the main menu options and prompt the user for input.
 
     :param menu: List of menu option strings to display.
@@ -73,7 +73,7 @@ def show_main_menu(menu) -> int:
     """
 
     while True:
-        print("\n\n\033[1;39;49mMain Menu:\033[0m\n")
+        print("\n\033[1;39;49mMain Menu:\033[0m\n")
         for index, option in enumerate(menu, start=1):
             print(f"{index}. {option}")
 
@@ -93,7 +93,7 @@ def show_main_menu(menu) -> int:
         wait_and_clear_screen()
 
 
-def show_rules(rule: str) -> None:
+def display_rules(rule: str) -> None:
     """Display game rules, scoring mechanics, and hint details.
     :param rule: Quiz rules and scoring mechanics to display.
     :type rule: str
@@ -115,7 +115,7 @@ def display_category_info(categories: list[tuple[str, int]]) -> None:
     :param categories: List of tuples containing (category_name, question_count).
     :type categories: list[tuple[str, int]]
     """
-    print("\n\033[1;93m ★ ★ ★  \033[1;92mAvailable Info\033[1;93m  ★ ★ ★\033[0m\n")
+    print("\n\033[1;93m ★ ★ ★  \033[1;92mAvailable Category Info\033[1;93m  ★ ★ ★\033[0m\n")
 
     for index, (category, count) in enumerate(categories, start=1):
         print(f"\033[1;32m{index}. {category}:\033[0m {count} questions available.")
@@ -129,7 +129,7 @@ def get_user_info() -> str:
     """
 
 
-def display_question_and_get_choice(category: str, question: str, choices: list[str], hint: str | None) -> int:
+def display_question_and_get_choice(category: str, question: str, choices: list[str], hint: str | None, question_index: int, total_questions: int) -> int:
     """Display a question prompt, list choices, and optionally provide a hint.
 
     Handles input validation and returns the 0-indexed selection.
@@ -142,12 +142,16 @@ def display_question_and_get_choice(category: str, question: str, choices: list[
     :type choices: list[str]
     :param hint: Optional hint text to assist the user.
     :type hint: str or None
+    :param question_index: The index of the current question.
+    :type question_index: int
+    :param total_questions: The total number of questions in the quiz.
+    :type total_questions: int
     :return: The 0-based index of the user's selected choice.
     :rtype: int
     """
 
     print("\033[0;39;104m\nCategory:\033[0m \033[1;32m" + category + "\033[0m")
-    print("\033[0;39;104mQuestion:\033[0m \033[1;32m" + question + "\033[0m")
+    print(f"\033[0;39;100mQuestion ({question_index}/{total_questions}):\033[0m \033[1;32m" + question + "\033[0m")
 
     for i, choice in enumerate(choices, start=1):
         print(f"\033[1;32m{i}.\033[0m {choice}")
@@ -179,14 +183,26 @@ def display_result(is_correct: bool, correct_choice: str) -> None:
     :type correct_choice: str
     """
     if is_correct:
-        print(f"\n\033[1;32mCorrect!\033[0mYour choice was {correct_choice}.")
+        print(f"\n\033[1;32mCorrect!\033[0m Your choice was {correct_choice}.")
     else:
         print(f"\n\033[1;31mIncorrect.\033[0m Your choice was {correct_choice}.")
 
 
-def display_summary(score: int) -> None:
+def display_summary(score: int, correct_answers: int, total_questions: int) -> None:
     """Display the final score summary after the quiz session.
 
     :param score: The user's final score. Score is presented as a percentage of correct answers out of number of questions attempted.
     :type score: int
+    :param correct_answers: The number of questions the user answered correctly.
+    :type correct_answers: int
+    :param total_questions: The total number of questions in chosen category and difficulty level. This is used to calculate the percentage score.
+    :type total_questions: int
     """
+
+    print("\033[1;93m★ ★ ★  \033[1;92mQUIZ SUMMARY\033[1;93m  ★ ★ ★\033[0m\n")
+    print(f"Final Score: {score}")
+    print(f"Correct Answers: {correct_answers}/{total_questions}")
+    print(f"Percentage: {correct_answers / total_questions * 100:.2f}%")
+
+    # Clear the screen after displaying the summary
+    wait_and_clear_screen()

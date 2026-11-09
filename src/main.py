@@ -45,10 +45,8 @@ def init_quiz_session() -> dict:
         "score": 0,
         "total_questions": 0,
         "correct_answers": 0,
-        "incorrect_answers": 0,
         "category": None,
         "difficulty": None,
-        "percentage": 0.0,
         "date": None,
     }
 
@@ -56,7 +54,7 @@ def init_quiz_session() -> dict:
 def start_quiz() -> None:
     """Start the quiz game by initializing a session and displaying the setup menu."""
     quiz_session = init_quiz_session()
-    quiz_session["category"], quiz_session["difficulty"] = menu.show_setup_menu(quiz.get_category())
+    quiz_session["category"], quiz_session["difficulty"] = menu.display_setup_menu(quiz.get_category())
 
     while True:
         # Get the list of questions for the selected category and difficulty
@@ -68,17 +66,12 @@ def start_quiz() -> None:
 
         quiz_session["total_questions"] = len(questions)
 
-        for question in questions:
+        for index, question in enumerate(questions, start=1):
             # If the difficulty is not "easy", remove the hint from the question dictionary
             if quiz_session["difficulty"].lower() != "easy":
                 question["hint"] = None
 
-            user_choice = menu.display_question_and_get_choice(
-                quiz_session["category"],
-                question["question"],
-                question["choices"],
-                question.get("hint"),
-            )
+            user_choice = menu.display_question_and_get_choice(quiz_session["category"], question["question"], question["choices"], question.get("hint"), index, quiz_session["total_questions"])
 
             if user_choice == question["answer"]:
                 menu.display_result(True, question["choices"][user_choice])
@@ -86,13 +79,15 @@ def start_quiz() -> None:
                 quiz_session["score"] += 10  # Award points for correct answers
             else:
                 menu.display_result(False, question["choices"][user_choice])
-                quiz_session["incorrect_answers"] += 1
 
-            quiz_session["total_questions"] += 1
             menu.wait_and_clear_screen()
 
-        # Calculate the percentage of correct answers
-        quiz_session["percentage"] = round((quiz_session["correct_answers"] / quiz_session["total_questions"]) * 100, 2)
+        # Display the final score summary after the quiz session
+        menu.display_summary(
+            score=quiz_session["score"],
+            correct_answers=quiz_session["correct_answers"],
+            total_questions=quiz_session["total_questions"],
+        )
 
         main(False)  # Return to main menu after finishing the quiz
 
@@ -105,11 +100,11 @@ def main(first_run=True) -> None:
         print_welcome()
 
     quiz_options = quiz.get_menu_options()  # Get the main menu options from the quiz module
-    user_choice = menu.show_main_menu(quiz_options)  # Get the user's menu choice from the menu module
+    user_choice = menu.display_main_menu(quiz_options)  # Get the user's menu choice from the menu module
 
     if user_choice == quiz_options.index("Exit"):
         print_goodbye()
-        return  # Exit the program
+        sys.exit()  # Exit the program
 
     if user_choice == quiz_options.index("Start Quiz"):
         start_quiz()  # Start the quiz if the user selected "Start Quiz"
@@ -117,9 +112,9 @@ def main(first_run=True) -> None:
         main(False)  # Restart the main menu after the quiz
 
     menu_actions = {
-        quiz_options.index("View High Scores"): lambda: menu.show_high_scores(quiz.get_high_scores()),
+        quiz_options.index("View High Scores"): lambda: menu.display_high_scores(quiz.get_high_scores()),
         quiz_options.index("Browse Categories"): lambda: menu.display_category_info(quiz.get_category_and_count()),
-        quiz_options.index("Rules"): lambda: menu.show_rules(quiz.get_rules()),
+        quiz_options.index("Rules"): lambda: menu.display_rules(quiz.get_rules()),
     }
 
     if user_choice in menu_actions:
